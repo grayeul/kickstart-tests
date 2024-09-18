@@ -496,7 +496,8 @@ else
                                                       -k ${KEEPIT} \
                                                       --append-host-id \
                                                       ${RETRY} ${UPDATES_ARG} ${BOOT_ARG} | tee /var/tmp/kstest-boblog.log 
-    
+    env >> /var/tmp/kstest-boblog.log
+
     timeout ${TIMEOUT} parallel --no-notice --jobs ${TEST_JOBS:-4} \
         PYTHONPATH=$PYTHONPATH scripts/launcher/run_one_test.py \
                                                       -i ${IMAGE} \
