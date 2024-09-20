@@ -33,5 +33,6 @@ kernel_args() {
     # Choose UI for manual testing.
     # echo inst.text
     # echo inst.graphical
+    echo ""
 }
 
