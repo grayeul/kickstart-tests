@@ -110,6 +110,7 @@ class Runner(object):
 
             v_conf = self._create_virtual_conf(log_path)
 
+            log.debug(f"RWR: ShellLauncher was built with config: {self._conf}")
             log.debug(f"RWR: starting virtManager with: {v_conf}")
             virt_manager = VirtualManager(v_conf)
 
