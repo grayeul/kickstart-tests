@@ -447,7 +447,7 @@ if [[ "$TEST_REMOTES" != "" ]]; then
 
     cd ..
 
-    echo "Starting the tests"
+    echo "Starting the tests on the remotes..."
 
     # Parallel aparently tends to import environment shell variables to the
     # remote shell run environment, which can cause issues if the host that
@@ -488,8 +488,16 @@ if [[ "$TEST_REMOTES" != "" ]]; then
         ssh kstest@${remote} rm -rf /var/tmp/kstest-\*
     done
 else
-    echo "Starting the tests"
+    echo "Starting the tests with no remotes"
     trap 'kill -INT -$pid' INT
+    echo "$(date): Running one test: (${tests})"
+    echo     PYTHONPATH=$PYTHONPATH scripts/launcher/run_one_test.py \
+                                                      -i ${IMAGE} \
+                                                      -k ${KEEPIT} \
+                                                      --append-host-id \
+                                                      ${RETRY} ${UPDATES_ARG} ${BOOT_ARG} | tee /var/tmp/kstest-boblog.log 
+    env >> /var/tmp/kstest-boblog.log
+
     timeout ${TIMEOUT} parallel --no-notice --jobs ${TEST_JOBS:-4} \
         PYTHONPATH=$PYTHONPATH scripts/launcher/run_one_test.py \
                                                       -i ${IMAGE} \
@@ -499,6 +507,7 @@ else
     pid=$!
     wait $pid
     rc=$?
+    echo "$(date): Now test is completed" | tee --append /var/tmp/kstest-boblog.log
 fi
 
 # Fix permissions of log folders gathered via libguestfs (they lack the x bit)

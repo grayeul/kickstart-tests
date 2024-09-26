@@ -58,6 +58,7 @@ class Runner(object):
         self._tmp_dir = tmp_dir
         self._ks_file = None
 
+        log.debug(f"RWR: Instantiate ShellLauncher with config: {configuration}")
         self._shell = ShellLauncher(configuration, tmp_dir)
         self._result_formatter = ResultFormatter(self._conf.ks_test_name, host_id=self.host_id)
         # test prepare function can change place of the kickstart test
@@ -109,6 +110,8 @@ class Runner(object):
 
             v_conf = self._create_virtual_conf(log_path)
 
+            log.debug(f"RWR: ShellLauncher was built with config: {self._conf}")
+            log.debug(f"RWR: starting virtManager with: {v_conf}")
             virt_manager = VirtualManager(v_conf)
 
             try:

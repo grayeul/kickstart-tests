@@ -8,7 +8,7 @@ function get_platform {
    local os_version=$2
    local platform=""
 
-   if [ ${os_name} == "rhel" ] || [ ${os_name} == "centos" ] ; then
+   if [ ${os_name} == "rhel" ] || [ ${os_name} == "centos" ] || [ ${os_name} == "rocky" ]; then
        platform=rhel
        os_major=$(echo "${os_version}" | grep -oE "^[[:digit:]]+")
        if [ -n "${os_major}" ] ; then

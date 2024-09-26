@@ -12,6 +12,7 @@ OS_VARIANT_TO_PLATFORM = {
     'rhel8': 'rhel8',
     'rhel9': 'rhel9',
     'rhel10': 'rhel10',
+    'rocky9': 'rocky9',
 }
 
 OS_VARIANT_TO_DISABLED = {
@@ -20,6 +21,7 @@ OS_VARIANT_TO_DISABLED = {
     'rhel8': 'SKIP_TESTTYPES_RHEL8',
     'rhel9': 'SKIP_TESTTYPES_RHEL9',
     'rhel10': 'SKIP_TESTTYPES_RHEL10',
+    'rocky9': 'SKIP_TESTTYPES_ROCKY9',
 }
 
 RE_MASTER = re.compile('^master$')
@@ -27,6 +29,7 @@ RE_FEDORA = re.compile('fedora-[0-9]+$')
 RE_RHEL8 = re.compile('rhel-8(.[0-9]+)?$')
 RE_RHEL9 = re.compile('rhel-9(.[0-9]+)?$')
 RE_RHEL10 = re.compile('rhel-10(.[0-9]+)?$')
+RE_ROCKY9 = re.compile('rocky-9(.[0-9]+)?$')
 
 SKIP_FILE = "containers/runner/skip-testtypes"
 
@@ -58,6 +61,9 @@ def get_arguments_for_branch(branch, skip_file):
     elif RE_RHEL10.match(branch):
         platform = "rhel10"
         skipvar = 'SKIP_TESTTYPES_RHEL10'
+    elif RE_ROCKY9.match(branch):
+        platform = "rocky9"
+        skipvar = 'SKIP_TESTTYPES_ROCKY9'
     else:
         platform = None
         skipvar = None
