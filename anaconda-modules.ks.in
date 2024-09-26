@@ -11,7 +11,7 @@
 %post --nochroot
 
 @KSINCLUDE@ scripts-lib.sh
-# Not sure exactly whythe platform name is being used instead of KSTEST_OS_NAME ?
+# Not sure exactly why the platform name is being used instead of KSTEST_OS_NAME ?
 # -- changed the mechanism for setting the expected output modules
 
 platform="$(get_platform @KSTEST_OS_NAME@ @KSTEST_OS_VERSION@)"
