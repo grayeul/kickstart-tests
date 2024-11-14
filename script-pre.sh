@@ -1,5 +1,6 @@
+#!/bin/bash
 #
-# Copyright (C) 2014  Red Hat, Inc.
+# Copyright (C) 2024  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -15,28 +16,25 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Chris Lumens <clumens@redhat.com>
+# Red Hat Author(s): Adam Kankovsky <akankovs@redhat.com>
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="storage gh1336"
+TESTTYPE="ksscript"
 
 . ${KSTESTDIR}/functions.sh
 
 validate() {
-    disksdir=$1
-    args=$(for d in ${disksdir}/disk-*img; do echo -a ${d}; done)
+    local disksdir=$1
+    local status=0
 
-    # There should be a /root/RESULT file with results in it.  Check
-    # its contents and decide whether the test finally succeeded or
-    # not.
-    result=$(run_with_timeout ${COPY_FROM_IMAGE_TIMEOUT} "virt-cat ${args} -m /dev/disk/by-label/rootfs /root/RESULT")
-    if [[ $? != 0 ]]; then
+    # Check for exactly two "SUCCESS" messages in the log file
+    local success_count
+    success_count=$(grep -c "SUCCESS" "${disksdir}/virt-install.log")
+
+    if [[ $success_count -ne 3 ]]; then
+        echo "*** ERROR: Expected 2 SUCCESS messages, but found ${success_count}."
         status=1
-        echo '*** /root/RESULT does not exist in VM image.'
-    elif [[ "${result}" != "SUCCESS" ]]; then
-        status=1
-        echo "${result}"
     fi
 
     return ${status}

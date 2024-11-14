@@ -1,5 +1,6 @@
+#!/bin/bash
 #
-# Copyright (C) 2014  Red Hat, Inc.
+# Copyright (C) 2024  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -15,29 +16,37 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Chris Lumens <clumens@redhat.com>
+# Red Hat Author(s): Adam Kankovsky <akankovs@redhat.com>
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="storage gh1336"
+TESTTYPE="ksscript"
 
 . ${KSTESTDIR}/functions.sh
 
 validate() {
-    disksdir=$1
-    args=$(for d in ${disksdir}/disk-*img; do echo -a ${d}; done)
+    local disksdir=$1
+    local status=0
 
-    # There should be a /root/RESULT file with results in it.  Check
-    # its contents and decide whether the test finally succeeded or
-    # not.
-    result=$(run_with_timeout ${COPY_FROM_IMAGE_TIMEOUT} "virt-cat ${args} -m /dev/disk/by-label/rootfs /root/RESULT")
-    if [[ $? != 0 ]]; then
+    # Check if the nochroot log file exists and contains expected output
+    if [[ ! -f "${disksdir}/root/post-nochroot.log" ]]; then
+        echo "*** ERROR: nochroot log file does not exist"
         status=1
-        echo '*** /root/RESULT does not exist in VM image.'
-    elif [[ "${result}" != "SUCCESS" ]]; then
+    elif ! grep -q "Post-install (nochroot) script finished" "${disksdir}/root/post-nochroot.log"; then
+        echo "*** ERROR: nochroot log does not contain expected 'finished' message"
         status=1
-        echo "${result}"
     fi
 
-    return ${status}
+    # Check if the chroot log file exists and contains expected output
+    if [[ ! -f "${disksdir}/root/post-chroot.log" ]]; then
+        echo "*** ERROR: chroot log file does not exist"
+        status=1
+    elif ! grep -q "Post-install (chroot) script finished" "${disksdir}/root/post-chroot.log"; then
+        echo "*** ERROR: chroot log does not contain expected 'finished' message"
+        status=1
+    fi
+
+    validate_RESULT $1
+    return $? || status
 }
+

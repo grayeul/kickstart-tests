@@ -22,6 +22,7 @@ fedora_skip_array=(
   gh1023      # rpm-ostree failing
   gh1060      # vnc tests too flaky
   gh1237      # container failing
+  gh1335      # image-deployment-2 failing
 )
 
 daily_iso_skip_array=(
@@ -68,6 +69,7 @@ rhel10_skip_array=(
   gh1110      # storage-multipath-autopart failing
   gh1207      # packages-multilib failing
   gh1213      # harddrive-iso-single failing
+  gh1336      # tmpfs-fixed-size failing due to RHEL-66617
 )
 
 # used in workflows/daily-boot-iso-rhel8.yml
