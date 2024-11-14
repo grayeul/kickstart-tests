@@ -21,7 +21,7 @@
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="skip-on-fedora manual skip-on-rocky"
+TESTTYPE="skip-on-fedora payload manual skip-on-rocky"
 
 . ${KSTESTDIR}/functions.sh
 

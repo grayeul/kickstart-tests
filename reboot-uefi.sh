@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2019  Red Hat, Inc.
+# Copyright (C) 2021  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -15,12 +15,18 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Jiri Konecny <jkonecny@redhat.com>
-
-#TESTTYPE="packaging skip-on-fedora"
-
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="skip-on-fedora payload manual skip-on-rocky"
+TESTTYPE="reboot uefi coverage smoke"
 
 . ${KSTESTDIR}/functions.sh
+
+enable_uefi() {
+    echo "true"
+}
+
+additional_runner_args() {
+    # Wait for reboot and shutdown of the VM,
+    # but exit after the specified timeout.
+    echo "--wait $(get_timeout)"
+}
