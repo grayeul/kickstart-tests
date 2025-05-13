@@ -13,6 +13,7 @@
          * Args passed:  -x (timeout) -k (keep) -i (iso) 
          *   Possible to use -s to skip tests (like knownfailure)
        * Afterwards copies /var/tmp/kstest-* to the LOGS_DIR to keep on host
+           * Note this can be problematic if many tests are run as /var/tmp stays in memory, and can get full
        * Then runs the summary report:  scripts/run_report.sh  (which parses the TEST_LOG (kstest.log) from stdin
 
    * run_kickstart_tests.sh
