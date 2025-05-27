@@ -8,12 +8,12 @@ fi
 
 flist=$1
 resName=$2
+OFILE=${resName}.$(date +%Y%m%d_%H%M).results.txt
 export baseDistro=${baseDistro:-rocky9}
-echo "Performing ${baseDistro} tests in $flist, results stored in base: $resName"
+echo "Performing ${baseDistro} tests in $flist, results stored in base: $resName" | tee --append results/testdates.log
 echo "Hit Ctrl-C if that is not what you want...."
 sleep 5
 echo "$(date) - Running dotest.sh $flist $resName" | tee --append results/testdates.log
-OFILE=${resName}.$(date +%Y%m%d_%H%M).results.txt
 echo "Ran: $* at $(date)" | tee ${OFILE}
 
 ./containers/runner/launch -r -j 2 -p ${baseDistro} $(cat $flist) | tee --append ${OFILE}
@@ -25,8 +25,9 @@ echo "   with results:  $(wc -l ${OFBASE}*.success.lst) Successes"| tee --append
 echo "                  $(wc -l ${OFBASE}*.fail.lst) Failures"| tee --append results/testdates.log
 echo "                  $(wc -l ${OFBASE}*.timedout.lst) TimeOuts"| tee --append results/testdates.log
 
-echo "Now renaming data/logs, to data/logs.${OFBASE}, and creating new data/logs"
-mv data/logs data/logs.${OFBASE}
+OBASE=$(basename $OFBASE)
+echo "Now renaming data/logs, to data/logs.${OBASE}, and creating new data/logs"
+mv data/logs data/logs.${OBASE}
 mkdir -p data/logs
 chmod 777 data/logs
 
