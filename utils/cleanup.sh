@@ -9,8 +9,10 @@ if [ $# -lt 1 ];then
 	exit
 fi
 ODIR=$(dirname $1)
-baseDistro=${baseDistro:-rocky9}
-OFBASE=$ODIR/${baseDistro}.$(date +%Y%m%d_%H%M)
+baseName=$(basename $1 | sed 's/.results.txt//')
+#baseDistro=${baseDistro:-rocky9}
+#OFBASE=$ODIR/${baseDistro}.$(date +%Y%m%d_%H%M)
+OFBASE=$ODIR/${baseName}
 for f in $*;do
 	echo $f
         grep -v RESULT $f  | grep ' SUCCESS ' | grep -v '^#' | cut -f1 -d\ | uniq | tee --append ${OFBASE}.success.lst
