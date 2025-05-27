@@ -19,7 +19,7 @@
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="network gh910"
+TESTTYPE="network gh910 stage2-from-compose"
 
 . ${KSTESTDIR}/functions.sh
 
@@ -30,5 +30,5 @@ stage2_from_ks() {
 
 # The test needs more RAM because installer image is downloaded from network
 get_required_ram() {
-    echo "2750"
+    echo ${STAGE2_FROM_COMPOSE_RAM_SIZE}
 }

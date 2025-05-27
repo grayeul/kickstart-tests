@@ -67,6 +67,9 @@ USER_NET_HOST_IP=10.0.2.2
 # RWR - this was 300s, change to 500s ?
 COPY_FROM_IMAGE_TIMEOUT=500s
 
+# The RAM required in case stage2_from_ks is used
+export STAGE2_FROM_COMPOSE_RAM_SIZE=3100
+
 kernel_args() {
     echo $DEFAULT_BOOTOPTS
 }
@@ -469,6 +472,7 @@ get_timeout() {
 stage2_from_ks() {
     # Return true to get stage2 location from kickstart (inst.stage2 option will not be supplied).
     # returns: "true" or "false"
+    # If used, get_required_ram should be set to STAGE2_FROM_COMPOSE_RAM_SIZE value.
     echo "false"
 }
 

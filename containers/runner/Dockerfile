@@ -1,4 +1,4 @@
-FROM fedora:39
+FROM fedora:41
 LABEL maintainer='anaconda-devel-list@redhat.com'
 
 RUN dnf -y update && \
@@ -18,6 +18,7 @@ RUN dnf -y update && \
     createrepo_c \
     python3-pip \
     python3-rpmfluff \
+    python3-rpm \
     squid \
     make \
     openssh-clients && \

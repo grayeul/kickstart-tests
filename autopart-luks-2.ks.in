@@ -1,4 +1,3 @@
-#test name: autopart-luks-2
 
 %ksappend repos/default.ks
 network --bootproto=dhcp
@@ -34,6 +33,14 @@ result="$(cryptsetup luksDump ${crypted} | awk '{ if ($1 == "Version:") print $2
 
 if [[ "$result" != "2" ]] ; then
     echo "*** unexpected LUKS version for ${crypted}: ${result}" > /root/RESULT
+    exit 1
+fi
+
+# Check if the 'allow-discards' flag is set.
+result=$(cryptsetup luksDump ${crypted} | grep "Flags" | cut -d: -f2 | tr -d "\t\n ")
+
+if [[ "$result" != "allow-discards" ]] ; then
+    echo "*** unexpected flags set for ${crypted}: ${result}" > /root/RESULT
     exit 1
 fi
 
