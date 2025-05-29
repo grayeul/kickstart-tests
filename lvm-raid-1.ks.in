@@ -15,7 +15,7 @@ part /boot --fstype=ext4 --size=500
 part raid.01 --size=7500 --ondisk=vda
 part raid.02 --size=7500 --ondisk=vdb
 part raid.03 --size=7500 --ondisk=vdc
-raid pv.01 --level=RAID5 --device=md_test raid.01 raid.02 raid.03
+raid pv.01 --level=RAID5 --device=pvtest raid.01 raid.02 raid.03
 volgroup fedora pv.01
 logvol swap --name=swap --vgname=fedora --size=500 --fstype=swap
 logvol / --name=root --vgname=fedora --grow --size=4000 --fstype=ext4
@@ -84,8 +84,8 @@ if [ $swap_lv_size != "500.00" ]; then
     echo "*** swap lv has incorrect size" >> /root/RESULT
 fi
 
-# verify that /dev/md/md_test exists (array was created with the correct name)
-if [ ! -e /dev/md/md_test ]; then
+# verify that /dev/md/pvtest exists (array was created with the correct name)
+if [ ! -e /dev/md/pvtest ]; then
     echo "** MD array has incorrect name" >> /root/RESULT
 fi
 
