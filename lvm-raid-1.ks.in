@@ -1,6 +1,7 @@
 # Basic test for LVM on top of MD array. In the volgroup command the
 # array is referred by the PV format "mount point" (pv.01), referring
 # to the array by its name is tested in lvm-raid-2 test case.
+# Note that names cannot start with md_
 
 #version=DEVEL
 %ksappend repos/default.ks

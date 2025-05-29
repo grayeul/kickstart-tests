@@ -1,5 +1,6 @@
 # Tests usage of newly created MD array name in the volgroup command and
 # handling of MD RAID names with md_ prefix by kickstart. See lvm-raid-1
+# Note: -- names with md_ prefix do *NOT* work properly
 # test case for alternative way to refer to the array in the volgroup
 # command.
 
@@ -15,8 +16,8 @@ reqpart
 part /boot --fstype=ext4 --size=500
 part raid.01 --size=7500 --ondisk=vda
 part raid.02 --size=7500 --ondisk=vdb
-raid pv.01 --level=RAID1 --device=md_test raid.01 raid.02
-volgroup fedora md_test
+raid pv.01 --level=RAID1 --device=pvtest raid.01 raid.02
+volgroup fedora pvtest
 logvol swap --name=swap --vgname=fedora --size=500 --fstype=swap
 logvol / --name=root --vgname=fedora --grow --size=4000 --fstype=ext4
 
