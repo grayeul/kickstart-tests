@@ -32,6 +32,7 @@ org.fedoraproject.Anaconda.Modules.Subscription
 org.fedoraproject.Anaconda.Modules.Timezone
 org.fedoraproject.Anaconda.Modules.Users
 EOF
+<<<<<<< HEAD
 # Adjust the expected output.
 if [ "@KSTEST_OS_NAME@" == "rocky" ] ; then
    # Rocky has no Runtime or Subscription
@@ -42,6 +43,23 @@ elif  [ "@KSTEST_OS_NAME@" == "centos" ] ; then
 elif [ "${platform}" == "rhel8" ] || [ "${platform}" == "rhel9" ] ;then
    # rhel8 and rhel9 don't have Runtime module
    sed -i /tmp/expected.out -e '/Modules.Runtime/d'
+=======
+# centos and fedora-eln have Subscription module forbidden in their conf profile
+elif [ "${platform:0:6}" == "centos" ] || [ "${platform}" == "fedora-eln" ]; then
+    cat > /tmp/expected.out << EOF
+org.fedoraproject.Anaconda.Modules.Localization
+org.fedoraproject.Anaconda.Modules.Network
+org.fedoraproject.Anaconda.Modules.Payloads
+org.fedoraproject.Anaconda.Modules.Runtime
+org.fedoraproject.Anaconda.Modules.Security
+org.fedoraproject.Anaconda.Modules.Services
+org.fedoraproject.Anaconda.Modules.Storage
+org.fedoraproject.Anaconda.Modules.Timezone
+org.fedoraproject.Anaconda.Modules.Users
+EOF
+# fedora and rhel10 activate Subscription module
+# On fedora the module is allowed to fail in conf (fails on rhsm not found).
+>>>>>>> master
 else
    # fedora and rhel10 activate Subscription module
    # On fedora the module is allowed to fail in conf (fails on rhsm not found).

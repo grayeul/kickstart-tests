@@ -18,7 +18,7 @@
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="payload ostree bootc coverage reboot skip-on-rhel-8 rhel84110"
+TESTTYPE="payload ostree bootc coverage reboot skip-on-rhel-8 gh1533"
 
 . ${KSTESTDIR}/functions.sh
 
@@ -64,6 +64,10 @@ copy_interesting_files_from_system() {
             copy-out '${item}' '${disksdir}'
             " 2>/dev/null
     done
+}
+
+kernel_args() {
+    echo "${DEFAULT_BOOTOPTS} console=ttyS7"
 }
 
 additional_runner_args() {

@@ -8,7 +8,7 @@
 #
 # Alternatively it is also possible to specify tests to run explicitly:
 #
-#  /test-os-variants --testtype TESTTYPE --skip-testtypes TYPE[,TYPE..] TEST1 TEST2
+#  /test-os-variants --testtype TESTTYPE --testtypes TYPE[,TYPE..] --skip-testtypes TYPE[,TYPE..] TEST1 TEST2
 #
 # Examples:
 #
@@ -26,6 +26,9 @@
 #
 # /test-os-variants --skip-testtypes gh123,gh765
 # ... run all the tests while skipping tests with given types (comma separated)
+
+# /test-os-variants --testtypes packaging,payload
+# ... run all the tests of type packaging and payload
 #
 #
 # Lastly there is a dry-run mode, that just indicates which tests would be run
@@ -110,7 +113,7 @@ jobs:
       GITHUB_TOKEN: /home/github/github-token
     strategy:
       matrix:
-        os-variant: [daily-iso, rawhide, rhel9, rhel10]
+        os-variant: [daily-iso, rawhide, fedora-eln, rhel9, rhel10, centos10]
       fail-fast: false
 
     steps:
@@ -162,7 +165,7 @@ jobs:
           set -eux
 
           BASE_COMMIT=$(git merge-base ${{ needs.pr-info.outputs.sha }} origin/${{ env.TARGET_BRANCH }})
-          CHANGED_TESTS=$(git diff --name-only $BASE_COMMIT HEAD -- *.ks.in $(find -maxdepth 1 -name '*.sh' -perm -u+x) | sed 's/\.ks\.in$//; s/\.sh$//' | sort -u | tr '\n' ' ')
+          CHANGED_TESTS=$(scripts/get-changed-tests.py $BASE_COMMIT HEAD)
           echo "changed_tests=${CHANGED_TESTS}" >> $GITHUB_OUTPUT
 
       - name: Generate test selection for os variant ${{ matrix.os-variant }}
@@ -239,7 +242,9 @@ jobs:
           set -eux
           if [ "${{ matrix.os-variant }}" == "rhel8" ] || \
              [ "${{ matrix.os-variant }}" == "rhel9" ] || \
-             [ "${{ matrix.os-variant }}" == "rhel10" ]; then
+             [ "${{ matrix.os-variant }}" == "rhel10" ] || \
+             [ "${{ matrix.os-variant }}" == "fedora-eln" ] || \
+             [ "${{ matrix.os-variant }}" == "centos10" ]; then
             source ./scripts/defaults-${{ matrix.os-variant }}.sh
             echo "installation_tree=${KSTEST_URL}" >> $GITHUB_OUTPUT
             echo "modular_url=${KSTEST_MODULAR_URL}" >> $GITHUB_OUTPUT

@@ -9,14 +9,15 @@ function get_platform {
    local platform=""
 
    if [ ${os_name} == "rhel" ] || [ ${os_name} == "centos" ] || [ ${os_name} == "rocky" ]; then
-       platform=rhel
+       platform=${os_name}
        os_major=$(echo "${os_version}" | grep -oE "^[[:digit:]]+")
        if [ -n "${os_major}" ] ; then
-           platform="rhel${os_major}"
+           platform="${os_name}${os_major}"
        fi
-   fi
-   if [ ${os_name} == "fedora" ] ; then
-       platform=fedora
+   elif [ ${os_name} == "fedora" ] ; then
+       platform="fedora"
+   elif [ ${os_name} == "fedora-eln" ] ; then
+       platform="fedora-eln"
    fi
 
    echo ${platform}

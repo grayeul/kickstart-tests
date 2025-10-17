@@ -68,7 +68,7 @@ USER_NET_HOST_IP=10.0.2.2
 COPY_FROM_IMAGE_TIMEOUT=500s
 
 # The RAM required in case stage2_from_ks is used
-export STAGE2_FROM_COMPOSE_RAM_SIZE=3100
+export STAGE2_FROM_COMPOSE_RAM_SIZE=3400
 
 kernel_args() {
     echo $DEFAULT_BOOTOPTS
@@ -444,6 +444,8 @@ export_additional_repo() {
         # Store the server address in file so that it can be sourced later
         # (eq. in kernel_args() and similar).
         echo addrepo_url=${httpd_url} > ${tmpdir}/addrepo_url
+    else
+        >&2 echo "WARNING: repository expected by export_additional_repo in data/additional_repo is missing. This might result in testing of unexpected versions of packages."
     fi
 }
 

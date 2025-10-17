@@ -10,39 +10,43 @@ common_skip_array=(
 
 fedora_skip_array=(
   skip-on-fedora
+)
+
+fedora_disabled_array=(
   gh576       # clearpart-4 test is flaky on all scenarios
   gh595       # proxy-cmdline failing on all scenarios
-  gh641       # packages-multilib failing on systemd conflict
-  gh774       # autopart-luks-1 failing
   gh777       # raid-1-reqpart failing
-  gh910       # stage2-from-ks test needs to be fixed for daily-iso
   gh890       # default-systemd-target-vnc-graphical-provides flaking too much
   rhbz1853668 # multipath device not constructed back after installation
   gh975       # packages-default failing
   gh1023      # rpm-ostree failing
-  gh1060      # vnc tests too flaky
-  gh1237      # container failing
   gh1335      # image-deployment-2 failing
-  gh1357      # selinux-context failing
+  gh1437      # lvm-cache-* failing
+  gh1493      # dns-global-exclusive-tls-* failing
+  gh1530      # dns-global-exclusive-tls-* stage2-from-compose failing
+  gh1514      # groups-and-envs-2 failing
 )
 
-daily_iso_skip_array=(
+daily_iso_disabled_array=(
+  gh1434      # reboot-inital-setup-* failing
+  gh910       # stage2-from-ks test needs to be fixed for daily-iso
 )
 
-rawhide_skip_array=(
+rawhide_disabled_array=(
 )
 
-rawhide_text_skip_array=(
-  skip-on-fedora
+rawhide_text_disabled_array=(
   rhbz1853668 # multipath device not constructed back after installation
 )
 
 rhel8_skip_array=(
   skip-on-rhel
   skip-on-rhel-8
+)
+
+rhel8_disabled_array=(
   gh576       # clearpart-4 test is flaky on all scenarios
   gh595       # proxy-cmdline failing on all scenarios
-  gh774       # autopart-luks-1 failing
   gh1018      # bridge-no-bootopts-net failing
   gh804       # tests requiring dvd iso failing
 )
@@ -50,28 +54,62 @@ rhel8_skip_array=(
 rhel9_skip_array=(
   skip-on-rhel
   skip-on-rhel-9
+)
+
+rhel9_disabled_array=(
   gh576       # clearpart-4 test is flaky on all scenarios
   gh595       # proxy-cmdline failing on all scenarios
   gh604       # packages-weakdeps: "gnupg2 --recommends has changed, test needs to be updated"
-  gh641       # packages-multilib failing on systemd conflict
-  gh774       # autopart-luks-1 failing
   gh804       # tests requiring dvd iso failing
-  rhel75659   # pykickstart removes md_ prefix from new MD devices
+  rhel16355   # mountpoint-assigment-plain waiting for feature release
+  gh1536      # groups-and-envs-* failing
+  gh1538      # packages-ignorebroken not implemented
+)
+
+rhel10_centos10_disabled_array=(
+  gh576       # clearpart-4 test is flaky on all scenarios
+  gh804       # tests requiring dvd iso failing
+  gh1090      # raid-1-reqpart failing
+  gh1207      # packages-multilib failing
+  gh1213      # harddrive-iso-single failing
+  gh1536      # groups-and-envs-* failing
+  gh1538      # packages-ignorebroken not implemented
 )
 
 rhel10_skip_array=(
   skip-on-rhel
   skip-on-rhel-10
-  gh576       # clearpart-4 test is flaky on all scenarios
-  gh640       # authselect-not-set failing
-  gh804       # tests requiring dvd iso failing
-  gh1090      # raid-1-reqpart failing
-  gh1107      # rpm-ostree-container failing
-  gh1110      # storage-multipath-autopart failing
-  gh1207      # packages-multilib failing
+)
+
+centos10_skip_array=(
+  skip-on-centos
+  skip-on-centos-10
+)
+
+centos10_disabled_array=(
+  gh1466      # ftp source tests failing
+  gh1474      # proxy-cmdline failing
+)
+
+fedora_eln_skip_array=(
+  skip-on-fedora-eln
+)
+
+fedora_eln_disabled_array=(
   gh1213      # harddrive-iso-single failing
-  rhel80086   # pykickstart removes md_ prefix from new MD devices
-  rhel84110   # rpm-container-ostree-bootc fix waiting for merge in RHEL 10.1
+  gh1090      # raid-1-reqpart failing
+  gh1527      # rootpw-basic and rootpw-lock failing
+  gh1207      # packages-multilib failing
+  gh975       # packages-default failing
+  gh1530      # dns-global-exclusive-tls-* stage2-from-compose failing
+  gh804       # tests requiring dvd iso failing
+  gh1532      # dns failing
+  gh1335      # image-deployment-2 failing
+  gh1533      # rpm-ostree-container-* tests failing
+  gh1534      # proxy-cmdline
+  gh1536      # groups-and-envs-* failing
+  gh1538      # packages-ignorebroken not implemented
+  gh1541      # flatpak-preinstall-* not implemented
 )
 
 # used in workflows/daily-boot-iso-rhel8.yml
@@ -97,13 +135,27 @@ _join_args_by_comma(){
 }
 
 # Do not forget to add new releases below as well
-SKIP_TESTTYPES_RAWHIDE=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_skip_array[@]}" "${rawhide_skip_array[@]}")
-SKIP_TESTTYPES_RAWHIDE_TEXT=$(_join_args_by_comma "${common_skip_array[@]}" "${rawhide_text_skip_array[@]}")
-SKIP_TESTTYPES_DAILY_ISO=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_skip_array[@]}" "${daily_iso_skip_array[@]}")
-SKIP_TESTTYPES_RHEL8=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel8_skip_array[@]}")
-SKIP_TESTTYPES_RHEL9=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel9_skip_array[@]}")
-SKIP_TESTTYPES_RHEL10=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel10_skip_array[@]}")
-SKIP_TESTTYPES_RHEL8_DAILY=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel8_daily_skip_array[@]}")
-SKIP_TESTTYPES_ROCKY9=$(_join_args_by_comma "${common_skip_array[@]}" "${rocky9_skip_array[@]}")
+SKIPPED_TESTTYPES_RAWHIDE=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_skip_array[@]}")
+SKIPPED_TESTTYPES_RAWHIDE_TEXT=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_skip_array[@]}")
+SKIPPED_TESTTYPES_DAILY_ISO=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_skip_array[@]}")
+SKIPPED_TESTTYPES_RHEL8=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel8_skip_array[@]}")
+SKIPPED_TESTTYPES_RHEL9=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel9_skip_array[@]}")
+SKIPPED_TESTTYPES_RHEL10=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel10_skip_array[@]}")
+SKIPPED_TESTTYPES_CENTOS10=$(_join_args_by_comma "${common_skip_array[@]}" "${centos10_skip_array[@]}")
+SKIPPED_TESTTYPES_RHEL8_DAILY=$(_join_args_by_comma "${common_skip_array[@]}" "${rhel8_daily_skip_array[@]}")
+SKIPPED_TESTTYPES_ROCKY9=$(_join_args_by_comma "${common_skip_array[@]}" "${rocky9_skip_array[@]}")
+SKIPPED_TESTTYPES_FEDORA_ELN=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_eln_skip_array[@]}")
+
 # Tests run on an anaconda pull request by comment
-SKIP_TESTTYPES_ANACONDA_PR=$(_join_args_by_comma "${common_skip_array[@]}" "${anaconda_pr_skip_array[@]}")
+SKIPPED_TESTTYPES_ANACONDA_PR=$(_join_args_by_comma "${common_skip_array[@]}" "${anaconda_pr_skip_array[@]}")
+
+DISABLED_TESTTYPES_DAILY_ISO=$(_join_args_by_comma "${fedora_disabled_array[@]}" "${daily_iso_disabled_array[@]}")
+DISABLED_TESTTYPES_RAWHIDE=$(_join_args_by_comma "${fedora_disabled_array[@]}" "${rawhide_disabled_array[@]}")
+DISABLED_TESTTYPES_RHEL8=$(_join_args_by_comma "${rhel8_disabled_array[@]}")
+DISABLED_TESTTYPES_RHEL9=$(_join_args_by_comma "${rhel9_disabled_array[@]}")
+DISABLED_TESTTYPES_RHEL10=$(_join_args_by_comma "${rhel10_centos10_disabled_array[@]}")
+DISABLED_TESTTYPES_CENTOS10=$(_join_args_by_comma "${rhel10_centos10_disabled_array[@]}" "${centos10_disabled_array[@]}")
+DISABLED_TESTTYPES_FEDORA_ELN=$(_join_args_by_comma "${common_skip_array[@]}" "${fedora_eln_disabled_array[@]}")
+
+# Keeping for scripts/run-ci.sh
+SKIP_TESTTYPES_RAWHIDE="${SKIPPED_TESTTYPES_RAWHIDE},${DISABLED_TESTTYPES_RAWHIDE}"

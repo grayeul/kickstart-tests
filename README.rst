@@ -224,6 +224,10 @@ The following environment variables are currently supported:
   mirror in Texas, USA in scripts/defaults.sh. This is potentially slow and
   you may want to point it at a local mirror.
 
+- KSTEST_FTP_APPSTREAM_URL - This variable is used by FTP tests on RHEL +
+  CentOS Stream. It is not used by Fedora and it is using the same mirrors as
+  KSTEST_FTP_URL.
+
 - KSTEST_URL - This variable is used by all tests that don't test installation
   method and instead just use the default.  It is set to the Fedora mirrors in
   scripts/defaults.sh.  This is potentially slow if you are running a lot of
@@ -373,8 +377,22 @@ tests, and PRs usually just run a few tests so that flakes are much less likely
 to ruin the result.
 
 To test a PR on all supported os versions (including rhel) there is a
-`test-os-variants`_ workflow running the tests on a comment in a PR.
-Running it requires admin repository permissions.
+`test-os-variants`_ workflow running the tests on a comment in a PR.  Running
+it requires admin repository permissions. The usage is documented at the top of
+the workflow file. The test should pass before merging. If it fails for some
+variant and it is okay to wait for release of the tested feature in a variant,
+it can be marked by ``feature pending`` label so it is easily clear why the PR is
+waiting. Other option to make the test pass and merge the PR would be disabling
+the feature temporarily for the variant with a reference to a ticket
+tracking/describing the disabling
+(`example <https://github.com/rhinstaller/kickstart-tests/commit/db5a3ac2b08a7ed3d0b9df5d7ca1964697ae4823>`__
+for issue tracked externally,
+`example <https://github.com/rhinstaller/kickstart-tests/pull/1271>`__ for an
+`issue <https://github.com/rhinstaller/kickstart-tests/issues/1270>`__ tracked in
+the repository). If the test should not be run on the variant at all it can be
+disabled explicitly for the variant
+(`example <https://github.com/rhinstaller/kickstart-tests/pull/1444>`__).
+
 
 Service jobs
 ------------
@@ -390,6 +408,14 @@ Service jobs
 These jobs don't have any particular infrastructure requirements. They run on
 GitHub's infrastructure and can be run manually by a developer.
 
+External test data
+------------------
+Some of the tests use content not covered by the common `*.ks.in`, `*.sh` and
+fragment files. Namely `preexisting-btrfs.tar.xz` and `raid-ddf.tar.xz` contain
+disk images with a specific content and `modular-repo.tar.gz` contains a repository
+with package modules. Content of the modular repo has been generated from
+https://gitlab.cee.redhat.com/rtt/rpm-test-repos.
+
 .. _runner documentation: ./containers/runner/README.md
 .. _containers: ./containers
 .. _self-hosted GitHub action runners: https://docs.github.com/en/free-pro-team@latest/actions/hosting-your-own-runners
@@ -397,6 +423,7 @@ GitHub's infrastructure and can be run manually by a developer.
 .. _skip-testtypes file: ./containers/runner/skip-testtypes
 .. _GitHub Daily run workflows page: https://github.com/rhinstaller/kickstart-tests/actions?query=workflow%3A%22Daily+run%22
 .. _tmt workflow: ./.github/workflows/testingfarm.yml
+.. _test-os-variants: ./.github/workflows/test-os-variants.yml
 .. _TMT: https://docs.testing-farm.io/
 .. _Travis: https://travis-ci.com/
 .. _.travis.yml: ./.travis.yml

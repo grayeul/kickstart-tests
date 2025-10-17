@@ -1,5 +1,6 @@
+#!/bin/bash
 #
-# Copyright (C) 2018  Red Hat, Inc.
+# Copyright (C) 2025  Red Hat, Inc.
 #
 # This copyrighted material is made available to anyone wishing to use,
 # modify, copy, or redistribute it subject to the terms and conditions of
@@ -15,10 +16,9 @@
 # License and may only be used or replicated with the express permission of
 # Red Hat, Inc.
 #
-# Red Hat Author(s): Vendula Poncova <vponcova@redhat.com>
 
 # Ignore unused variable parsed out by tooling scripts as test tags metadata
 # shellcheck disable=SC2034
-TESTTYPE="mount storage"
+TESTTYPE="packaging payload skip-on-fedora skip-on-rhel-9 skip-on-centos gh1541 gh1466"
 
 . ${KSTESTDIR}/functions.sh
