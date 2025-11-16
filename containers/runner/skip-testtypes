@@ -20,11 +20,9 @@ fedora_disabled_array=(
   rhbz1853668 # multipath device not constructed back after installation
   gh975       # packages-default failing
   gh1023      # rpm-ostree failing
-  gh1335      # image-deployment-2 failing
   gh1437      # lvm-cache-* failing
   gh1493      # dns-global-exclusive-tls-* failing
   gh1530      # dns-global-exclusive-tls-* stage2-from-compose failing
-  gh1514      # groups-and-envs-2 failing
 )
 
 daily_iso_disabled_array=(
@@ -89,6 +87,7 @@ rhel10_centos10_disabled_array=(
   gh1213      # harddrive-iso-single failing
   gh1536      # groups-and-envs-* failing
   gh1538      # packages-ignorebroken not implemented
+  rhel119216  # deprecated-rhel-10 waiting for feature release
 )
 
 rocky10_disabled_array=(
